@@ -51,7 +51,7 @@ class Queen extends ChessPiece{
     Queen(Team team){ super(team, "Queen", Direction.getQueenDirections(team), 8, 50); }
 }
 class King extends ChessPiece{
-    King(Team team){ super(team, "King", Direction.getQueenDirections(team), 1, Integer.MAX_VALUE / 2); }
+    King(Team team){ super(team, "King", Direction.getQueenDirections(team), 1, 1_000_000); }
 }
 class Knight extends ChessPiece{
     Knight(Team team){ super(team, "Knight", Direction.getKnightDirections(team), 1, 3); }

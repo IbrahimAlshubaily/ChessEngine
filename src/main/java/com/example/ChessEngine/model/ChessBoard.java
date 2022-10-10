@@ -1,8 +1,6 @@
 package com.example.ChessEngine.model;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,9 +19,8 @@ public class ChessBoard {
         this.gameOver = false;
         this.winner = null;
     }
-    @SuppressWarnings("unchecked")
     public ChessBoard(ChessBoard board) {
-        this.pieces = (HashMap<ChessBoardPosition, ChessPiece>) board.pieces.clone();
+        this.pieces = new HashMap<>(board.pieces);
         this.gameOver = board.gameOver;
         this.winner = board.winner;
     }
@@ -88,11 +85,9 @@ public class ChessBoard {
                 (isEmpty(move.destination) || isOpponent(move));
     }
 
-    boolean isValidMove(ChessBoardMove move, Team turn) {
+    boolean isValid(ChessBoardMove move) {
         ChessPiece piece = pieces.get(move.source);
-        if (piece.getTeam() == turn)
-            return  piece.getMoves(this, move.source).anyMatch(move::equals);
-        return false;
+        return  piece.getMoves(this, move.source).anyMatch(move::equals);
     }
     boolean isInBounds(ChessBoardPosition position) {
         return 0 <= position.row && position.row < BOARD_SIZE
@@ -114,6 +109,12 @@ public class ChessBoard {
     private Stream<Entry<ChessBoardPosition, ChessPiece>> getTeamStream(Team team){
         return pieces.entrySet().stream().unordered()
                 .filter((entry) -> entry.getValue().getTeam() == team);
+    }
+
+    public List<ChessBoardPosition> getMoves(ChessBoardPosition pos) {
+        if (!pieces.containsKey(pos))
+            return new ArrayList<>();
+        return pieces.get(pos).getMoves(this, pos).map(move -> move.destination).collect(Collectors.toList());
     }
 
     public Stream<ChessBoardMove> getMoves(Team team) {
