@@ -25,7 +25,8 @@ public class ChessController {
         String[] input =  move.split("-");
         int row = Integer.parseInt(input[0]);
         int col = Integer.parseInt(input[1]);
-        currGame.addPiece("newPiece", row, col);
+        //currGame.addPiece("newPiece", row, col);
+        currGame.minMaxStep();
         return new ResponseEntity<>(move, HttpStatus.CREATED);
     }
 }
